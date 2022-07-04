@@ -24,10 +24,7 @@ const entrySchema = new mongoose.Schema({
   title : String,
   description : String,
   createdOn : String,
-  category : String,
-  points : Number,
-  priority : String,
-  files : Object
+  category : String
 });
 const Entry = mongoose.model("Entry", entrySchema);
 
@@ -52,9 +49,18 @@ app.get("/", (req,res) => {
 app.post("/login", (req,res) => {
     const username = req.body.username
     const password = req.body.password
+    const device = req.body.device
     User.find({username:username}, (err,users) => {
         if(users.length>0){
             if(users[0].password===md5(password)){
+                if(device){
+                    const newDevice = new Device ({
+                        device: device,
+                        userId : users[0].userId
+                    })
+                
+                    newDevice.save()
+                }
                 res.json(users[0].userId)
             } else {
                 res.json("incorrect password")
@@ -85,26 +91,34 @@ const generateID = (u) => {
 app.post("/register", (req,res) => {
     const username = req.body.username
     const password = md5(req.body.password)
-    const device = (req.body.device?req.body.device:null)
+    const device = req.body.device
+    const userId = generateID(username)
     const newUser = new User ({
         username: username,
         password: password,
-        device: [device],
-        userId : generateID(username)
+        userId : userId,
     })
 
     newUser.save((err) => {
         if(err) {
             console.log(err);
         } else {
-            res.json(generateID(username))
+            if(device){
+                const newDevice = new Device ({
+                    device: device,
+                    userId : userId
+                })
+            
+                newDevice.save()
+            }
+            res.json(userId)
         }
     })
 })
 //add entry
 app.post("/entry", (req,res) => {
-  const {userId, itemId, title, decsription, createdOn, category, points, priority, files} = req.body
-  const newEntry = new Entry ({userId, itemId, title, decsription, createdOn, category, points, priority, files})
+  const {userId, itemId, title, decsription, createdOn, category} = req.body
+  const newEntry = new Entry ({userId, itemId, title, decsription, createdOn, category})
 
   newEntry.save((err) => {
     if(err) {
@@ -148,10 +162,9 @@ app.post("/entry/:itemId/delete", (req,res) => {
         }
     })
 })
-//read all entries of a user
+//read all entries
 app.post("/entries", (req,res) => {
-    const userId = req.body.userId
-    Entry.find({userId:userId}, (err,items) => {
+    Entry.find({}, (err,items) => {
         if(err){
             console.log(err);
         } else {

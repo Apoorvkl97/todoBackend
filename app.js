@@ -47,6 +47,7 @@ app.get("/", (req,res) => {
 })
 
 app.post("/login", (req,res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*')
     const email = req.body.email
     const password = req.body.password
     const device = req.body.device
@@ -72,6 +73,7 @@ app.post("/login", (req,res) => {
 })
 //check for device
 app.post("/device", (req,res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*')
     const device = req.body.device
     Device.find({device:device}, (err,users) => {
         if(users.length>0){
@@ -89,6 +91,7 @@ const generateID = (u) => {
 }
 
 app.post("/register", (req,res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*')
     const email = req.body.email
     const fullName = req.body.fullName
     const password = md5(req.body.password)
@@ -119,6 +122,7 @@ app.post("/register", (req,res) => {
 })
 //add entry
 app.post("/entry", (req,res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*')
   const {userId, itemId, title, description, createdOn, category} = req.body
   const newEntry = new Entry ({userId, itemId, title, description, createdOn, category})
 
@@ -132,6 +136,7 @@ app.post("/entry", (req,res) => {
 })
 //read an entry
 app.post("/entry/:itemId", (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*')
     const itemId = req.params.itemId
     Entry.find({itemId:itemId}, (err,items) => {
         if(items.length>0){
@@ -143,6 +148,7 @@ app.post("/entry/:itemId", (req, res) => {
 })
 //update entry: body contains key value pairs of fields to be updated
 app.post("/entry/:itemId/update", (req,res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*')
     const itemId = req.params.itemId
     const data = req.body
     Entry.updateOne({itemId:itemId}, data, (err) => {
@@ -155,6 +161,7 @@ app.post("/entry/:itemId/update", (req,res) => {
 })
 
 app.post("/entry/:itemId/delete", (req,res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*')
     const itemId = req.params.itemId
     Entry.deleteOne({itemId:itemId},(err) => {
         if(err){
@@ -166,6 +173,7 @@ app.post("/entry/:itemId/delete", (req,res) => {
 })
 //read all entries
 app.post("/entries", (req,res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*')
     Entry.find({}, (err,items) => {
         if(err){
             console.log(err);
@@ -176,6 +184,7 @@ app.post("/entries", (req,res) => {
 })
 
 app.get("/deleteAll", (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*')
     Entry.deleteMany({},(err) => {
         if(!err){
             res.send("deleted all")

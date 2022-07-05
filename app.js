@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const cors=require('cors');
+const cors = require('cors');
 const dotenv = require('dotenv').config();
 const md5 = require('md5');
 
@@ -9,11 +9,8 @@ const username = process.env.DB_USERNAME;
 const password = process.env.DB_PASSWORD;
 
 const app = express();
-var corsOptions = {
-    origin: '*',
-    optionsSuccessStatus: 200,
-  }
-app.use(cors(corsOptions));
+
+app.use(cors());
 app.use(bodyParser.urlencoded({limit:"10000kb",extended:true}));
 app.use(bodyParser.json({limit:"10000kb",extended:true}));
 
@@ -47,7 +44,7 @@ const deviceSchema = new mongoose.Schema({
   const Device = mongoose.model("Device", deviceSchema);
 
 app.get("/", (req,res) => {
-    res.send("backend of to do list app")
+    res.send("backend of to do list app - 12:51")
 })
 
 app.post("/login", (req,res) => {

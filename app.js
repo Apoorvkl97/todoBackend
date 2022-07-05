@@ -94,7 +94,7 @@ app.post("/register", (req,res) => {
     const fullName = req.body.fullName
     const password = md5(req.body.password)
     const device = req.body.device
-    const userId = generateID(username)
+    const userId = generateID(email)
     const newUser = new User ({
         email: email,
         fullName: fullName,

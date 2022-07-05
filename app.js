@@ -14,7 +14,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({limit:"10000kb",extended:true}));
 app.use(bodyParser.json({limit:"10000kb",extended:true}));
 
-mongoose.connect(`mongodb+srv://${username}:${password}@cluster0.nl88l.mongodb.net/todolistDB?retryWrites=true&w=majority`)
+mongoose.connect(`mongodb+srv://admin-apoorv:apoorv1997@cluster0.nl88l.mongodb.net/todolistDB?retryWrites=true&w=majority`)
 .catch((err) => {
     console.log(err);
 })

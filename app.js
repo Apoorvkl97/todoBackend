@@ -29,9 +29,9 @@ const entrySchema = new mongoose.Schema({
 const Entry = mongoose.model("Entry", entrySchema);
 
 const userSchema = new mongoose.Schema({
-    username : String,
+    email : String,
+    fullName : String,
     password : String,
-    devices : Object,
     userId : Number
   });
   const User = mongoose.model("User", userSchema);
@@ -47,10 +47,10 @@ app.get("/", (req,res) => {
 })
 
 app.post("/login", (req,res) => {
-    const username = req.body.username
+    const email = req.body.email
     const password = req.body.password
     const device = req.body.device
-    User.find({username:username}, (err,users) => {
+    User.find({email:email}, (err,users) => {
         if(users.length>0){
             if(users[0].password===md5(password)){
                 if(device){
@@ -66,7 +66,7 @@ app.post("/login", (req,res) => {
                 res.json("incorrect password")
             }
         } else {
-            res.json("incorrect username")
+            res.json("incorrect email")
         }
     })
 })
@@ -89,12 +89,14 @@ const generateID = (u) => {
 }
 
 app.post("/register", (req,res) => {
-    const username = req.body.username
+    const email = req.body.email
+    const fullName = req.body.fullName
     const password = md5(req.body.password)
     const device = req.body.device
     const userId = generateID(username)
     const newUser = new User ({
-        username: username,
+        email: email,
+        fullName: fullName,
         password: password,
         userId : userId,
     })
@@ -117,8 +119,8 @@ app.post("/register", (req,res) => {
 })
 //add entry
 app.post("/entry", (req,res) => {
-  const {userId, itemId, title, decsription, createdOn, category} = req.body
-  const newEntry = new Entry ({userId, itemId, title, decsription, createdOn, category})
+  const {userId, itemId, title, description, createdOn, category} = req.body
+  const newEntry = new Entry ({userId, itemId, title, description, createdOn, category})
 
   newEntry.save((err) => {
     if(err) {
@@ -169,6 +171,14 @@ app.post("/entries", (req,res) => {
             console.log(err);
         } else {
             res.json(items)
+        }
+    })
+})
+
+app.get("/deleteAll", (req, res) => {
+    Entry.deleteMany({},(err) => {
+        if(!err){
+            res.send("deleted all")
         }
     })
 })

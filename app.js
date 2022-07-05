@@ -74,7 +74,7 @@ app.post("/login", (req,res) => {
 //check for device
 app.post("/device", (req,res) => {
     const device = req.body.device
-    Device.find({device:device}, (err,users) => {
+    Device.find({userId:device}, (err,users) => {
         if(users.length>0){
             res.json(users[0].userId)
         } else {

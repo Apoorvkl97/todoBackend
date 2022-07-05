@@ -147,9 +147,9 @@ app.post("/entry/:itemId/update", (req,res) => {
     const data = req.body
     Entry.updateOne({itemId:itemId}, data, (err) => {
         if(err){
-            res.json(true)
-        } else {
             res.json(false)
+        } else {
+            res.json(true)
         }
     })
 })

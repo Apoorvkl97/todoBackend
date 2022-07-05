@@ -9,7 +9,11 @@ const username = process.env.DB_USERNAME;
 const password = process.env.DB_PASSWORD;
 
 const app = express();
-app.use(cors({origin: true}));
+var corsOptions = {
+    origin: '*',
+    optionsSuccessStatus: 200,
+  }
+app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({limit:"10000kb",extended:true}));
 app.use(bodyParser.json({limit:"10000kb",extended:true}));
 

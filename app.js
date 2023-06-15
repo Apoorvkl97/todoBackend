@@ -2,11 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const dotenv = require('dotenv').config();
+require('dotenv').config();
 const md5 = require('md5');
-
-const username = process.env.DB_USERNAME;
-const password = process.env.DB_PASSWORD;
 
 const app = express();
 
@@ -14,7 +11,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({limit:"10000kb",extended:true}));
 app.use(bodyParser.json({limit:"10000kb",extended:true}));
 
-mongoose.connect(`mongodb+srv://admin-apoorv:apoorv1997@cluster0.nl88l.mongodb.net/todolistDB?retryWrites=true&w=majority`)
+mongoose.connect(`mongodb+srv://admin-apoorv:${process.env.DB_PASSWORD}@cluster0.nl88l.mongodb.net/todolistDB?retryWrites=true&w=majority`)
 .catch((err) => {
     console.log(err);
 })
